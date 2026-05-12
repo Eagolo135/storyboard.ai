@@ -1,0 +1,301 @@
+.pageShell {
+  margin: 0 auto;
+  max-width: 1480px;
+  padding: 40px 24px 72px;
+}
+
+.hero {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: minmax(0, 1.5fr) minmax(280px, 0.9fr);
+  margin-bottom: 28px;
+}
+
+.hero h1 {
+  font-family: var(--font-heading);
+  font-size: clamp(3rem, 6vw, 5.25rem);
+  letter-spacing: -0.04em;
+  line-height: 0.92;
+  margin: 0 0 18px;
+}
+
+.eyebrow {
+  color: var(--color-accent);
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  margin: 0 0 14px;
+  text-transform: uppercase;
+}
+
+.heroCopy {
+  color: var(--color-muted);
+  font-size: 1.1rem;
+  line-height: 1.7;
+  margin: 0;
+  max-width: 64ch;
+}
+
+.storyMetaCard,
+.panel {
+  background: var(--color-surface);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--color-line);
+  border-radius: 28px;
+  box-shadow: var(--shadow-soft);
+}
+
+.storyMetaCard {
+  align-self: end;
+  padding: 24px;
+}
+
+.storyTitle {
+  font-family: var(--font-heading);
+  font-size: 1.6rem;
+  margin: 0 0 12px;
+}
+
+.genreRow,
+.tagRow,
+.promptRow,
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.genreRow span,
+.tagRow span,
+.promptChip,
+.noteHeading span,
+.metricCard {
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(36, 65, 77, 0.12);
+  border-radius: 999px;
+}
+
+.genreRow span,
+.tagRow span,
+.noteHeading span {
+  font-size: 0.76rem;
+  padding: 6px 10px;
+}
+
+.workspaceGrid {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: minmax(320px, 0.95fr) minmax(0, 1.35fr);
+}
+
+.sidebar,
+.mainColumn {
+  min-width: 0;
+}
+
+.panel {
+  padding: 22px;
+}
+
+.panelHeader {
+  align-items: baseline;
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.panelHeader h2 {
+  font-family: var(--font-heading);
+  font-size: 1.65rem;
+  margin: 0;
+}
+
+.panelHeader p,
+.noteCard p,
+.retrievedCard p,
+.warningBox p {
+  color: var(--color-muted);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.noteGroups,
+.retrievedList,
+.storyboardSections {
+  display: grid;
+  gap: 16px;
+}
+
+.noteGroup h3,
+.storyboardSections h3 {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  margin: 0 0 10px;
+  text-transform: capitalize;
+}
+
+.noteCard,
+.retrievedCard,
+.metricCard,
+.warningBox,
+.storyboardSections section {
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(31, 23, 32, 0.08);
+  border-radius: 20px;
+  padding: 16px;
+}
+
+.noteHeading {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.noteHeading strong {
+  font-size: 0.98rem;
+}
+
+.promptChip,
+.primaryButton,
+.secondaryButton {
+  cursor: pointer;
+  transition: transform 180ms ease, background-color 180ms ease;
+}
+
+.promptChip,
+.secondaryButton {
+  color: var(--color-deep);
+  padding: 10px 14px;
+}
+
+.primaryButton,
+.secondaryButton {
+  border: 0;
+  border-radius: 999px;
+  padding: 12px 18px;
+}
+
+.primaryButton {
+  background: linear-gradient(135deg, #bb5a3c, #d98d4e);
+  color: white;
+}
+
+.secondaryButton {
+  background: white;
+  color: var(--color-ink);
+}
+
+.promptChip:hover,
+.primaryButton:hover,
+.secondaryButton:hover {
+  transform: translateY(-1px);
+}
+
+.requestInput {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(31, 23, 32, 0.12);
+  border-radius: 20px;
+  min-height: 160px;
+  outline: none;
+  padding: 18px;
+  resize: vertical;
+  width: 100%;
+}
+
+.requestInput:focus {
+  border-color: rgba(187, 90, 60, 0.55);
+  box-shadow: 0 0 0 4px var(--color-accent-soft);
+}
+
+.resultsGrid {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: minmax(0, 1.05fr) minmax(300px, 0.95fr);
+  margin: 24px 0;
+}
+
+.reasonList,
+.beatList {
+  display: grid;
+  gap: 10px;
+  line-height: 1.6;
+  margin: 12px 0 0;
+  padding-left: 18px;
+}
+
+.breakdownGrid,
+.metricGrid {
+  display: grid;
+  gap: 12px;
+}
+
+.breakdownGrid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 12px;
+}
+
+.breakdownItem,
+.metricCard {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.metricGrid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.metricCard strong {
+  font-family: var(--font-heading);
+  font-size: 1.2rem;
+}
+
+.warningBox {
+  display: grid;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.storyboardSections {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.storyboardSections p,
+.storyboardSections li,
+.breakdownItem span,
+.breakdownItem strong {
+  line-height: 1.65;
+}
+
+.errorText {
+  color: #a12d2d;
+  margin: 12px 0 0;
+}
+
+@media (max-width: 1120px) {
+  .workspaceGrid,
+  .hero,
+  .resultsGrid,
+  .storyboardSections {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 680px) {
+  .pageShell {
+    padding: 24px 14px 48px;
+  }
+
+  .panel,
+  .storyMetaCard {
+    padding: 18px;
+  }
+
+  .metricGrid,
+  .breakdownGrid {
+    grid-template-columns: 1fr;
+  }
+}

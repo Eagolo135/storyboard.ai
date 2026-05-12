@@ -1,0 +1,101 @@
+{
+  "story": {
+    "id": "ninth-ember",
+    "title": "The Ninth Ember",
+    "genre": ["Ashpunk Fantasy", "Frontier Thriller", "Political Suspense"],
+    "premise": "Rail cartographer Jun Aras uncovers proof that the empire's ember routes are sacrificing refugee settlements and must decide whether to expose the map ledger before an engineered storm erases the evidence.",
+    "tone": "Dry, intimate, heat-struck, and pressure-driven rather than heroic or sweeping.",
+    "styleGuide": [
+      "Stay close to one viewpoint and let heat, dust, and vibration carry emotion.",
+      "Favor precise frontier detail over generic epic fantasy grandeur.",
+      "Keep humor dry and brief under stress.",
+      "Treat politics as logistics made personal."
+    ]
+  },
+  "notes": [
+    {
+      "id": "ne-char-jun-aras",
+      "category": "character",
+      "title": "Jun Aras can read ember routes but cannot survive raw flare exposure",
+      "summary": "Jun is a rail cartographer whose pattern sense lets him spot falsified route maps and ember drift, but unshielded flarelight triggers old burn trauma and leaves him physically unreliable.",
+      "content": "Jun Aras trusts maps because they hold still longer than people do. He can read route fraud from timing gaps and ash accumulation, yet direct flare exposure turns his hands unsteady and his memory noisy enough to threaten every careful choice.",
+      "tags": ["jun", "cartographer", "flarelight", "maps", "burn trauma"],
+      "characters": ["Jun Aras"],
+      "locations": ["Meridian Signal Tower"],
+      "chapterRefs": [1, 5, 6],
+      "priority": 5,
+      "evidencePhrases": ["spot falsified route maps", "flarelight leaves him physically unreliable"],
+      "continuityConstraints": ["Jun reads routes well but should not shrug off raw flare exposure."]
+    },
+    {
+      "id": "ne-lore-ember-storms",
+      "category": "lore",
+      "title": "Engineered ember storms can erase tracks and settlements alike",
+      "summary": "The imperial rail ministry seeds ember storms to hide route diversions, but the storms carry conductive ash that strips water rigs and burns signal glass from the inside out.",
+      "content": "Ember storms are not only weather. They are policy tools that can erase evidence, isolate districts, and make supply failures look inevitable if no one retains the map history.",
+      "tags": ["ember storms", "rail ministry", "ash", "erasure"],
+      "characters": ["Jun Aras", "Len Damar"],
+      "locations": ["Salt March", "Meridian Signal Tower"],
+      "chapterRefs": [2, 4, 6],
+      "priority": 5,
+      "evidencePhrases": ["seed ember storms to hide route diversions", "erase evidence"],
+      "continuityConstraints": ["Ember storms are deliberate infrastructure violence, not neutral weather."]
+    },
+    {
+      "id": "ne-plot-ledger-choice",
+      "category": "plot",
+      "title": "Chapter six hinges on whether Jun releases the route ledger before the storm hits",
+      "summary": "Jun must choose between publishing the ledger immediately and triggering a crackdown, or trusting Len Damar to help reroute a refugee train before the storm closes the line.",
+      "content": "The central pressure is timing, responsibility, and whether partial trust can preserve lives long enough for truth to matter. The conflict should stay grounded in infrastructure decisions rather than last-minute battlefield spectacle.",
+      "tags": ["chapter six", "ledger", "storm", "trust", "reroute"],
+      "characters": ["Jun Aras", "Len Damar"],
+      "locations": ["Meridian Signal Tower"],
+      "chapterRefs": [6],
+      "priority": 5,
+      "evidencePhrases": ["publishing the ledger immediately", "help reroute a refugee train"],
+      "continuityConstraints": ["The chapter six confrontation should center on truth versus survival timing, not spectacle combat."]
+    },
+    {
+      "id": "ne-setting-signal-tower",
+      "category": "setting",
+      "title": "The Meridian Signal Tower is all wire hum, hot glass, and dust pressure",
+      "summary": "The tower overlooks the salt flats through scorched panes, with relay levers, copper coils, and narrow catwalks that make every choice feel one slip away from public disaster.",
+      "content": "This space should feel vertical, hot, and mechanically intimate. Wind rattles the signal panes, ash hisses across the tower skin, and conversation has to compete with wire-hum and distant rail thunder.",
+      "tags": ["signal tower", "glass", "wire hum", "salt flats"],
+      "characters": [],
+      "locations": ["Meridian Signal Tower"],
+      "chapterRefs": [3, 6],
+      "priority": 4,
+      "evidencePhrases": ["every choice feel one slip away from public disaster"],
+      "continuityConstraints": ["The signal tower should feel hot, precarious, and mechanically loud rather than grand or serene."]
+    },
+    {
+      "id": "ne-style-close-third",
+      "category": "style",
+      "title": "Use close-third frontier pressure with restrained dryness",
+      "summary": "The prose should stay intimate and sensory, leaning on heat shimmer, grit, breath, and wire vibration while keeping humor sparse and defensive.",
+      "content": "Preferred texture: hot brass, ash on the tongue, quiet calculations under pressure, and a viewpoint that notices logistics before slogans. Avoid epic speechifying, quippy banter, and generic rebellion rhetoric.",
+      "tags": ["close third", "heat", "sensory", "restrained", "dry humor"],
+      "characters": [],
+      "locations": [],
+      "chapterRefs": [1, 6],
+      "priority": 5,
+      "evidencePhrases": ["stay intimate and sensory", "humor sparse and defensive"],
+      "continuityConstraints": ["Voice stays close, dry, and pressure-aware rather than bombastic."]
+    },
+    {
+      "id": "ne-prev-route-fraud",
+      "category": "previous-chapter",
+      "title": "Chapter five ended with Jun falsifying a public route board to save one convoy",
+      "summary": "Jun diverted inspectors by posting a false public route, buying time for a refugee convoy while binding Len Damar to the lie and making both of them vulnerable when the ledger surfaces.",
+      "content": "The previous chapter closes on an improvised survival move, not a victory. Jun is carrying guilt, Len is implicated whether he wants it or not, and the storm window is now brutally short.",
+      "tags": ["chapter five", "false route", "refugees", "guilt", "storm window"],
+      "characters": ["Jun Aras", "Len Damar"],
+      "locations": ["Meridian Signal Tower", "Salt March"],
+      "chapterRefs": [5, 6],
+      "priority": 5,
+      "evidencePhrases": ["posting a false public route", "the storm window is now brutally short"],
+      "continuityConstraints": ["The new scene should inherit guilt, urgency, and shared exposure from the false-route decision."]
+    }
+  ]
+}

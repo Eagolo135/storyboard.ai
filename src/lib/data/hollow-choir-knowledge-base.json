@@ -1,0 +1,101 @@
+{
+  "story": {
+    "id": "hollow-choir",
+    "title": "The Hollow Choir",
+    "genre": ["Gothic Fantasy", "Cathedral Mystery", "Political Suspense"],
+    "premise": "Bellkeeper Sera Vale steals a key-bell that can seal the city choir forever and must decide whether to trust the brother she exiled before the cathedral turns collective memory into judgment.",
+    "tone": "Hushed, intimate, pressure-heavy, and metallic rather than melodramatic.",
+    "styleGuide": [
+      "Stay close to one frightened but disciplined viewpoint at a time.",
+      "Favor tactile metal, breath, echo, and pressure over abstract lore exposition.",
+      "Keep dialogue restrained and morally loaded rather than florid.",
+      "Let sacred architecture behave like a machine under strain."
+    ]
+  },
+  "notes": [
+    {
+      "id": "hc-char-sera-vale",
+      "category": "character",
+      "title": "Sera Vale can carry the key-bell but not sing the gate-chord safely",
+      "summary": "Sera is a disciplined bellkeeper whose ear for fracture lets her hear where the choir machinery is failing, but every forbidden chord she sings leaves her coughing blood and borrowed grief.",
+      "content": "Sera Vale was trained to keep the cathedral's machine-saints in tune, not command them. She can hear stress running through bronze and bone alike, yet forcing the gate-chord through her own body risks collapse, debt, and public panic.",
+      "tags": ["sera", "bellkeeper", "fracture", "debt", "discipline"],
+      "characters": ["Sera Vale"],
+      "locations": ["Bellfound Cathedral"],
+      "chapterRefs": [2, 9, 10],
+      "priority": 5,
+      "evidencePhrases": ["every forbidden chord leaves her coughing blood", "hear where the choir machinery is failing"],
+      "continuityConstraints": ["Sera can sense resonance fractures, but singing the gate-chord costs her physically and emotionally."]
+    },
+    {
+      "id": "hc-lore-resonance-debt",
+      "category": "lore",
+      "title": "Resonance debt means commanded sound always extracts a price",
+      "summary": "The choir can shut gates, erase names from ledgers, and call civic memory to order, but every major command transfers debt into the nearest living singer or listener.",
+      "content": "Bellfound's civic miracles work because resonance debt is never destroyed, only displaced. Large commands crack teeth, splinter memory, or bind fresh guilt into whoever stands closest when the bells answer.",
+      "tags": ["resonance debt", "choir", "commanded sound", "price"],
+      "characters": ["Sera Vale", "Brother Anik"],
+      "locations": ["Bellfound Cathedral", "Resonance Vault"],
+      "chapterRefs": [3, 8, 10],
+      "priority": 5,
+      "evidencePhrases": ["every major command transfers debt", "civic miracles always exact a price"],
+      "continuityConstraints": ["The choir's power always costs someone nearby; miracle without price would be false."]
+    },
+    {
+      "id": "hc-plot-gate-decision",
+      "category": "plot",
+      "title": "Chapter ten turns on whether the west choir gate is sealed or opened",
+      "summary": "Sera must decide whether to ring the west choir gate shut and condemn the exiles outside it, or let Brother Anik through long enough to expose the dean's false absolution record.",
+      "content": "The chapter pressure is moral and procedural, not martial. The central decision is whether trust can survive long enough for truth to matter before the cathedral bureaucracy converts fear into irreversible judgment.",
+      "tags": ["chapter ten", "gate", "trust", "record", "judgment"],
+      "characters": ["Sera Vale", "Brother Anik"],
+      "locations": ["West Choir Gate"],
+      "chapterRefs": [10],
+      "priority": 5,
+      "evidencePhrases": ["seal the west choir gate shut", "expose the dean's false absolution record"],
+      "continuityConstraints": ["The chapter ten confrontation should hinge on trust, timing, and institutional judgment rather than random violence."]
+    },
+    {
+      "id": "hc-setting-bellfound",
+      "category": "setting",
+      "title": "Bellfound Cathedral compresses every whisper into public pressure",
+      "summary": "The nave hangs with bronze throats, chainwalks, incense haze, and narrow maintenance stairs where each footstep returns a second later as accusation.",
+      "content": "Bellfound should feel cavernous but intimate, all metal chill, dusted light, and echoes that make private decisions sound nearly public. People must lean close to be understood even while the room makes secrecy difficult.",
+      "tags": ["cathedral", "bronze", "echo", "maintenance stairs"],
+      "characters": [],
+      "locations": ["Bellfound Cathedral", "West Choir Gate"],
+      "chapterRefs": [1, 9, 10],
+      "priority": 4,
+      "evidencePhrases": ["each footstep returns a second later as accusation"],
+      "continuityConstraints": ["Bellfound should feel metallic, echoing, and pressure-heavy rather than soft or cozy."]
+    },
+    {
+      "id": "hc-style-close-third",
+      "category": "style",
+      "title": "Use close-third dread with restrained sensory precision",
+      "summary": "Stay intimate, quiet, and sensory, using breath, iron, dust, and vibration rather than theatrical gothic excess or modern snark.",
+      "content": "Preferred texture: fingers numb on bronze, dry incense catching in the throat, pressure behind the sternum when the bells wake. Avoid omniscient moralizing, quippy banter, and decorative darkness for its own sake.",
+      "tags": ["close third", "quiet", "sensory", "restrained", "no snark"],
+      "characters": [],
+      "locations": [],
+      "chapterRefs": [1, 10],
+      "priority": 5,
+      "evidencePhrases": ["stay intimate, quiet, and sensory", "avoid theatrical gothic excess"],
+      "continuityConstraints": ["Voice stays restrained, tactile, and intimate rather than campy or omniscient."]
+    },
+    {
+      "id": "hc-prev-key-bell-theft",
+      "category": "previous-chapter",
+      "title": "Chapter nine ended with Sera stealing the key-bell and fleeing below the nave",
+      "summary": "Sera escaped into the organ maintenance tunnels with the key-bell, knowing the dean can now accuse her publicly while Brother Anik is still outside the gate with only partial proof.",
+      "content": "The prior chapter ends on escape, pursuit, and incomplete evidence. Sera is exhausted, short of breath, and carrying an object that can either save the city or become the pretext for mass punishment.",
+      "tags": ["chapter nine", "key-bell", "escape", "tunnels", "partial proof"],
+      "characters": ["Sera Vale", "Brother Anik"],
+      "locations": ["Organ Maintenance Tunnels", "Bellfound Cathedral"],
+      "chapterRefs": [9, 10],
+      "priority": 5,
+      "evidencePhrases": ["escaped into the organ maintenance tunnels", "Brother Anik is still outside the gate"],
+      "continuityConstraints": ["The scene begins after flight and pursuit, not after safety or resolution."]
+    }
+  ]
+}

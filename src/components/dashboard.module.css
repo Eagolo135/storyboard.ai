@@ -1,0 +1,266 @@
+.pageShell {
+  margin: 0 auto;
+  max-width: 1180px;
+  padding: 40px 24px 72px;
+}
+
+.hero {
+  display: grid;
+  gap: 20px;
+  margin-bottom: 28px;
+}
+
+.eyebrow {
+  color: var(--color-accent);
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  margin: 0 0 14px;
+  text-transform: uppercase;
+}
+
+.hero h1,
+.sectionHeader h2 {
+  font-family: var(--font-heading);
+  margin: 0;
+}
+
+.hero h1 {
+  font-size: clamp(2.4rem, 5vw, 4.4rem);
+  letter-spacing: -0.04em;
+  line-height: 0.94;
+}
+
+.lede,
+.mutedText,
+.storyCard p,
+.setupCard p,
+.signedOutCard p {
+  color: var(--color-muted);
+  line-height: 1.7;
+  margin: 0;
+}
+
+.grid,
+.heroGrid {
+  display: grid;
+  gap: 24px;
+}
+
+.heroGrid {
+  grid-template-columns: minmax(0, 1.3fr) minmax(280px, 0.8fr);
+}
+
+.panel,
+.setupCard,
+.signedOutCard,
+.storyCard,
+.statusCard {
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: 26px;
+  box-shadow: var(--shadow-soft);
+}
+
+.panel,
+.setupCard,
+.signedOutCard {
+  padding: 22px;
+}
+
+.sectionHeader {
+  align-items: baseline;
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.sectionHeader p {
+  color: var(--color-muted);
+  margin: 0;
+}
+
+.storyGrid {
+  display: grid;
+  gap: 14px;
+}
+
+.demoGrid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.storyCard,
+.statusCard {
+  padding: 16px;
+}
+
+.storyCardHeader {
+  align-items: start;
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+}
+
+.demoCard {
+  background: rgba(255, 255, 255, 0.58);
+  border: 1px solid rgba(31, 23, 32, 0.08);
+  border-radius: 22px;
+  display: grid;
+  gap: 14px;
+  padding: 18px;
+}
+
+.demoCardActive {
+  border-color: rgba(187, 90, 60, 0.36);
+  box-shadow: inset 0 0 0 1px rgba(187, 90, 60, 0.18);
+}
+
+.demoCardHeader {
+  align-items: start;
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+}
+
+.demoCardHeader h3 {
+  font-family: var(--font-heading);
+  margin: 0;
+}
+
+.demoMeta {
+  background: rgba(255, 255, 255, 0.76);
+  border: 1px solid rgba(31, 23, 32, 0.08);
+  border-radius: 999px;
+  color: var(--color-muted);
+  font-size: 0.76rem;
+  padding: 6px 10px;
+  white-space: nowrap;
+}
+
+.storyCard h3,
+.demoCard h3,
+.setupCard h2,
+.signedOutCard h2,
+.statusCard h3 {
+  font-family: var(--font-heading);
+  margin: 0 0 8px;
+}
+
+.metaRow,
+.setupList {
+  color: var(--color-muted);
+}
+
+.metaRow {
+  font-size: 0.9rem;
+  margin-top: 12px;
+}
+
+.createForm {
+  display: grid;
+  gap: 14px;
+}
+
+.fieldGroup {
+  display: grid;
+  gap: 8px;
+}
+
+.fieldGroup input,
+.fieldGroup select,
+.fieldGroup textarea {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(31, 23, 32, 0.12);
+  border-radius: 16px;
+  outline: none;
+  padding: 14px 16px;
+}
+
+.fieldGroup input:focus,
+.fieldGroup select:focus,
+.fieldGroup textarea:focus {
+  border-color: rgba(187, 90, 60, 0.55);
+  box-shadow: 0 0 0 4px var(--color-accent-soft);
+}
+
+.fieldGroup select {
+  min-height: 52px;
+}
+
+.primaryAction,
+.secondaryLink {
+  border-radius: 999px;
+  cursor: pointer;
+  display: inline-flex;
+  justify-content: center;
+  padding: 12px 18px;
+  text-decoration: none;
+}
+
+.primaryAction {
+  background: linear-gradient(135deg, #bb5a3c, #d98d4e);
+  border: 0;
+  color: white;
+}
+
+.secondaryLink {
+  background: rgba(255, 255, 255, 0.84);
+  border: 1px solid rgba(31, 23, 32, 0.08);
+  color: var(--color-ink);
+}
+
+.statusBadge {
+  background: rgba(187, 90, 60, 0.1);
+  border: 1px solid rgba(187, 90, 60, 0.16);
+  border-radius: 999px;
+  color: var(--color-accent);
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 6px 10px;
+  white-space: nowrap;
+}
+
+.statusMessage,
+.errorMessage {
+  margin: 0;
+}
+
+.formNote {
+  color: var(--color-muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.statusMessage {
+  color: var(--color-deep);
+}
+
+.errorMessage {
+  color: #9a2a2a;
+}
+
+.setupList {
+  margin: 16px 0 0;
+  padding-left: 18px;
+}
+
+.fullWidthPanel {
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 960px) {
+  .heroGrid,
+  .demoGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 680px) {
+  .pageShell {
+    padding: 24px 14px 48px;
+  }
+}

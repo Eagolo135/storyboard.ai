@@ -1,0 +1,42 @@
+:root {
+  --font-heading: "Fraunces", serif;
+  --font-body: "Manrope", sans-serif;
+  --color-ink: #1f1720;
+  --color-muted: #655b66;
+  --color-paper: #fffaf3;
+  --color-surface: rgba(255, 249, 240, 0.8);
+  --color-accent: #bb5a3c;
+  --color-accent-soft: rgba(187, 90, 60, 0.14);
+  --color-deep: #24414d;
+  --color-line: rgba(31, 23, 32, 0.12);
+  --shadow-soft: 0 24px 60px rgba(36, 65, 77, 0.12);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background:
+    radial-gradient(circle at top left, rgba(187, 90, 60, 0.16), transparent 30%),
+    radial-gradient(circle at 85% 10%, rgba(36, 65, 77, 0.18), transparent 28%),
+    linear-gradient(180deg, #f4ede3 0%, #f8f2ea 45%, #fcf8f2 100%);
+  color: var(--color-ink);
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--font-body);
+  color: var(--color-ink);
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+a {
+  color: inherit;
+}
