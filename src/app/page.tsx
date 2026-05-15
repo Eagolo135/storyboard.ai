@@ -1,42 +1,71 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
-import { DemoStoryLibrary } from "@/components/demo-story-library";
-import { StoryboardWorkspace } from "@/components/storyboard-workspace";
 import dashboardStyles from "@/components/dashboard.module.css";
-import {
-  DEFAULT_STORY_ID,
-  getStoryKnowledgeBase,
-  getStoryPromptSuggestions,
-  listStoryKnowledgeBaseSummaries,
-} from "@/lib/data/repository";
+import { getViewer } from "@/lib/auth/viewer";
 
-export default function Home() {
-  const knowledgeBase = getStoryKnowledgeBase(DEFAULT_STORY_ID);
-  const sampleRequests = getStoryPromptSuggestions(DEFAULT_STORY_ID);
-  const storySummaries = listStoryKnowledgeBaseSummaries();
+export default async function Home() {
+  const viewer = await getViewer();
+
+  if (viewer.status === "signed-in") {
+    redirect("/dashboard");
+  }
+
+  const primaryHref = "/sign-in";
+  const primaryLabel = "Sign in to begin";
 
   return (
-    <>
-      <main className={dashboardStyles.pageShell}>
-        <section className={dashboardStyles.setupCard}>
-          <p className={dashboardStyles.eyebrow}>Platform transition</p>
-          <h2>StoryBoard AI is growing into an authenticated workspace</h2>
-          <p>
-            The original single-story MVP is still available below as a live demo. The
-            new dashboard foundation for per-user stories is available at /dashboard.
+    <main className={dashboardStyles.pageShell}>
+      <section className={dashboardStyles.landingHero}>
+        <div className={dashboardStyles.landingHeroCopy}>
+          <p className={dashboardStyles.eyebrow}>Cinematic story operating system</p>
+          <h1>Build a story world that feels like a film already running in your head.</h1>
+          <p className={dashboardStyles.landingLead}>
+            StoryBoard AI is a cinematic planning space for novelists and visual storytellers
+            who need more than a blank document. It gathers your lore, scene fragments,
+            chapter notes, and source files into a single story workspace so every new beat
+            carries the right atmosphere, continuity, and pressure.
           </p>
-          <Link className={dashboardStyles.secondaryLink} href="/dashboard">
-            Open dashboard foundation
-          </Link>
-        </section>
+          <p className={dashboardStyles.landingSubcopy}>
+            Sign in to enter your dashboard, create a story, and keep each world organized
+            inside a private story library built for planning, continuity, and atmosphere.
+          </p>
+          <div className={dashboardStyles.landingActions}>
+            <Link className={dashboardStyles.primaryAction} href={primaryHref}>
+              {primaryLabel}
+            </Link>
+            {viewer.status === "not-configured" ? (
+              <Link className={dashboardStyles.secondaryLink} href="/setup">
+                Review setup
+              </Link>
+            ) : null}
+          </div>
+        </div>
 
-        <DemoStoryLibrary activeStoryId={DEFAULT_STORY_ID} stories={storySummaries} />
-      </main>
-      <StoryboardWorkspace
-        knowledgeBase={knowledgeBase}
-        sampleRequests={sampleRequests}
-        storyId={DEFAULT_STORY_ID}
-      />
-    </>
+        <div className={dashboardStyles.heroSceneCard}>
+          <p className={dashboardStyles.sceneLabel}>What the space is for</p>
+          <div className={dashboardStyles.sceneLine} />
+          <p className={dashboardStyles.sceneText}>
+            A harbor before dawn. A cathedral on the edge of collapse. A floodgate engine
+            hall loud enough to swallow confession. StoryBoard AI helps you hold that kind of
+            pressure on the page by keeping your story facts close when you plan the next move.
+          </p>
+          <div className={dashboardStyles.sceneStats}>
+            <div>
+              <strong>1.</strong>
+              <span>Create a story workspace.</span>
+            </div>
+            <div>
+              <strong>2.</strong>
+              <span>Fill it with notes, drafts, and source files.</span>
+            </div>
+            <div>
+              <strong>3.</strong>
+              <span>Return to a story library that remembers what matters.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
   );
 }

@@ -23,6 +23,11 @@ export interface SourceDocumentRepository {
     ownerId: string,
     input: CreateSourceDocumentRecordInput,
   ): Promise<SourceDocumentRepositoryResult<SourceDocumentRecord>>;
+  updateSourceDocumentProcessingStatusForOwner(
+    ownerId: string,
+    sourceDocumentId: string,
+    processingStatus: SourceDocumentRecord["processingStatus"],
+  ): Promise<SourceDocumentRepositoryResult<SourceDocumentRecord>>;
 }
 
 function createSupabaseAdminClient() {
@@ -152,6 +157,43 @@ class SupabaseSourceDocumentRepository implements SourceDocumentRepository {
       };
     }
   }
+
+  async updateSourceDocumentProcessingStatusForOwner(
+    ownerId: string,
+    sourceDocumentId: string,
+    processingStatus: SourceDocumentRecord["processingStatus"],
+  ): Promise<SourceDocumentRepositoryResult<SourceDocumentRecord>> {
+    try {
+      const client = createSupabaseAdminClient();
+      const { data, error } = await client
+        .from("source_documents")
+        .update({
+          processing_status: processingStatus,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("owner_clerk_id", ownerId)
+        .eq("id", sourceDocumentId)
+        .select(
+          "id, story_id, owner_clerk_id, source_type, file_name, storage_path, raw_text, processing_status, created_at, updated_at",
+        )
+        .single();
+
+      if (error) {
+        return { ok: false, error: error.message };
+      }
+
+      return {
+        ok: true,
+        data: mapSourceDocumentRow(data),
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        error:
+          error instanceof Error ? error.message : "Unable to update source document status.",
+      };
+    }
+  }
 }
 
 class UnconfiguredSourceDocumentRepository implements SourceDocumentRepository {
@@ -182,6 +224,16 @@ class UnconfiguredSourceDocumentRepository implements SourceDocumentRepository {
       ok: false,
       error:
         "Supabase is not configured yet. Add the required environment variables before creating source documents.",
+    };
+  }
+
+  async updateSourceDocumentProcessingStatusForOwner(): Promise<
+    SourceDocumentRepositoryResult<SourceDocumentRecord>
+  > {
+    return {
+      ok: false,
+      error:
+        "Supabase is not configured yet. Add the required environment variables before updating source documents.",
     };
   }
 }

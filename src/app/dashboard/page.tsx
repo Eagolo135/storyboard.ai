@@ -1,10 +1,16 @@
 import Link from "next/link";
 
 import { CreateStoryForm } from "@/components/create-story-form";
+import { DemoStoryLibrary } from "@/components/demo-story-library";
 import { PasteSourceForm } from "@/components/paste-source-form";
+import { SignOutButton } from "@/components/sign-out-button";
 import styles from "@/components/dashboard.module.css";
 import { getViewer } from "@/lib/auth/viewer";
-import { getMissingPlatformRequirements } from "@/lib/platform/env";
+import { listStoryKnowledgeBaseSummaries } from "@/lib/data/repository";
+import {
+  getMissingPlatformRequirements,
+  getRecommendedPlatformEnhancements,
+} from "@/lib/platform/env";
 import { listSourceDocumentsForOwner } from "@/lib/source-documents/service";
 import { listStoriesForOwner } from "@/lib/stories/service";
 
@@ -13,6 +19,7 @@ export default async function DashboardPage() {
 
   if (viewer.status === "not-configured") {
     const missing = getMissingPlatformRequirements();
+    const recommended = getRecommendedPlatformEnhancements();
 
     return (
       <main className={styles.pageShell}>
@@ -29,6 +36,16 @@ export default async function DashboardPage() {
               <li key={item}>{item}</li>
             ))}
           </ul>
+          {recommended.length > 0 ? (
+            <ul className={styles.setupList}>
+              {recommended.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          ) : null}
+          <Link className={styles.secondaryLink} href="/setup">
+            Open setup guide
+          </Link>
         </section>
       </main>
     );
@@ -47,6 +64,9 @@ export default async function DashboardPage() {
           <Link className={styles.secondaryLink} href="/sign-in">
             Sign in
           </Link>
+          <Link className={styles.secondaryLink} href="/setup">
+            Review setup
+          </Link>
         </section>
       </main>
     );
@@ -54,6 +74,7 @@ export default async function DashboardPage() {
 
   const storiesResult = await listStoriesForOwner(viewer.userId);
   const sourceDocumentsResult = await listSourceDocumentsForOwner(viewer.userId);
+  const demoStorySummaries = listStoryKnowledgeBaseSummaries();
 
   return (
     <main className={styles.pageShell}>
@@ -61,11 +82,18 @@ export default async function DashboardPage() {
         <p className={styles.eyebrow}>Authenticated workspace</p>
         <div className={styles.heroGrid}>
           <div>
-            <h1>Your stories</h1>
+            <h1>Your story library</h1>
             <p className={styles.lede}>
-              This dashboard is the first step toward a real multi-user StoryBoard AI
-              platform where every user owns their own stories, source files, and AI outputs.
+              This is where your worlds live once you sign in. Create a new story,
+              return to existing projects, and keep each source archive attached to the
+              story it belongs to.
             </p>
+            <div className={styles.heroActions}>
+              <Link className={styles.primaryAction} href="#create-story">
+                Create a new story
+              </Link>
+              <SignOutButton className={styles.secondaryLink} />
+            </div>
           </div>
           <div className={styles.statusCard}>
             <h3>Current foundation status</h3>
@@ -76,10 +104,26 @@ export default async function DashboardPage() {
         </div>
       </section>
 
+      <section className={styles.panel}>
+        <div className={styles.sectionHeader}>
+          <div>
+            <h2>Scoring and AI evaluation sandbox</h2>
+            <p>
+              Open a curated demo workspace to inspect retrieval scores, continuity evaluation,
+              hallucination risk, model mode, and feedback generated from a storyboard request.
+            </p>
+          </div>
+          <Link className={styles.secondaryLink} href={`/demo/${demoStorySummaries[0]?.id ?? "glass-archive"}`}>
+            Open evaluation demo
+          </Link>
+        </div>
+        <DemoStoryLibrary activeStoryId="" stories={demoStorySummaries} />
+      </section>
+
       <section className={styles.grid}>
-        <div className={styles.panel}>
+        <div className={styles.panel} id="create-story">
           <div className={styles.sectionHeader}>
-            <h2>Create story</h2>
+            <h2>Create new story</h2>
             <p>Start a workspace that will later hold uploaded drafts and retrieval context.</p>
           </div>
           <CreateStoryForm />
@@ -87,8 +131,8 @@ export default async function DashboardPage() {
 
         <div className={styles.panel}>
           <div className={styles.sectionHeader}>
-            <h2>Story list</h2>
-            <p>Stories are scoped to the signed-in user.</p>
+            <h2>Story library</h2>
+            <p>Every story below belongs to the signed-in account.</p>
           </div>
 
           {storiesResult.ok ? (

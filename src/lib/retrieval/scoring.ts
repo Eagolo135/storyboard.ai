@@ -200,6 +200,7 @@ export function scoreStoryNote(
     categoryAlignment: round(categoryAlignment),
     chapterRelevance: round(chapterRelevance),
     priorityBoost: round(priorityBoost),
+    semanticSimilarity: 0,
     total: round(total),
   };
 }

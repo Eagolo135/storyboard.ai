@@ -10,3 +10,6 @@
 - Started Sprint 007 by adding a story-scoped source-document domain layer plus pasted-text intake and recent-source status in the dashboard.
 - Explicitly deferred Sprint 006 retrieval hardening until authentic semantic retrieval exists.
 - Extended Sprint 007 with story-level source workspaces, PDF/DOCX upload support, server-side extraction, and a Supabase Storage bucket migration for source files.
+- Added an explicit provider setup contract via `.env.example`, platform env helpers, and a `/setup` activation guide for Clerk, Supabase, and AI provider wiring.
+- Added an OpenAI-compatible AI generation seam that prefers live model-backed storyboards when configured and falls back to the deterministic generator when not.
+- Surfaced generation metadata in storyboard output and Markdown exports so it is clear whether results came from a live provider or fallback mode.

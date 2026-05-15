@@ -51,6 +51,13 @@ The repository already contains a functioning single-story MVP built before the 
 - Supabase Storage bucket migration for source document files.
 - Initial source-document schema validation tests.
 
+## Provider Activation Slice Added
+- `.env.example` now defines the committed local environment contract.
+- Platform environment helpers now distinguish auth, database, and AI setup status.
+- A dedicated `/setup` route explains how to activate Clerk SSO, Supabase persistence, and an OpenAI-compatible model provider.
+- Storyboard orchestration now prefers a live model provider when configured and falls back safely to the deterministic generator otherwise.
+- Storyboard results and Markdown exports now surface generation metadata and fallback warnings.
+
 ## Architecture Summary
 ### UI Layer
 - `src/app/page.tsx` loads the default story workspace and the curated demo library.
@@ -73,7 +80,8 @@ The repository already contains a functioning single-story MVP built before the 
 - `src/lib/retrieval/retrieve-story-context.ts` orchestrates retrieval.
 
 ### Generation Layer
-- `src/lib/storyboard/generate-storyboard.ts` builds the required storyboard sections from retrieved notes.
+- `src/lib/storyboard/generate-storyboard.ts` builds the deterministic fallback storyboard sections from retrieved notes.
+- `src/lib/ai/generate-storyboard.ts` calls an OpenAI-compatible provider when configured and falls back safely when it is not.
 
 ### Evaluation Layer
 - `src/lib/evaluation/evaluate-storyboard.ts` computes continuity-related scores.
@@ -87,7 +95,8 @@ The repository already contains a functioning single-story MVP built before the 
 2. Scene requests produce retrieved notes, storyboard output, evaluation, and exportable Markdown for the selected story kit.
 3. The authenticated dashboard can create stories, show story-level source workspaces, and accept pasted source text into story-scoped source-document records.
 4. PDF and DOCX uploads can be stored and extracted into source-document records.
-5. Test, lint, and build commands pass.
+5. Storyboard generation can use a live AI provider when credentials are present, while staying usable without them.
+6. Test and lint commands pass.
 
 ## What Is Missing or Weak
 1. The app is still dependent on curated local seed data rather than uploaded source material.
@@ -95,7 +104,7 @@ The repository already contains a functioning single-story MVP built before the 
 3. Weak prompts still receive top notes, even when they are poor matches.
 4. Upload extraction exists, but chunking and embeddings are not implemented yet.
 5. The new multi-story demo library is not yet backed by user-owned retrieval against ingested sources.
-6. Generation is structured but intentionally limited by deterministic templates.
+6. Build validation in this workspace is currently constrained by disk-space pressure on the system drive.
 
 ## What Can Be Reused Safely
 1. The current app structure and route handler.
@@ -115,6 +124,7 @@ This Windows setup uses webpack-based Next scripts because Turbopack native bind
 2. Misleading retrieval confidence for weak prompts.
 3. The new product direction now materially exceeds the old MVP scope and requires auth, persistence, ingestion, and real retrieval architecture changes.
 4. End-to-end auth and persistence verification is currently blocked until Clerk and Supabase credentials are configured in this workspace.
+5. Live provider-backed storyboard verification is currently blocked until AI credentials are configured in this workspace.
 
 ## Recommendation
 Treat the current codebase as a validated bridge baseline: authenticated foundation plus curated multi-story demos. The next meaningful product sprint should focus on document ingestion and authentic retrieval architecture, while sprint 006 retrieval hardening should wait until real semantic retrieval exists.

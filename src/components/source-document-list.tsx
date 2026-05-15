@@ -47,7 +47,7 @@ export function SourceDocumentList({
           </div>
           <p>{getDocumentPreview(document)}</p>
           <p className={styles.metaRow}>
-            Updated {new Date(document.updatedAt).toLocaleString()}
+            {processingStatusLabels[document.processingStatus]} • Updated {new Date(document.updatedAt).toLocaleString()}
           </p>
         </article>
       ))}

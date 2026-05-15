@@ -8,6 +8,8 @@
     "start": "next start",
     "lint": "eslint .",
     "test": "vitest run",
+    "backfill:chunk-embeddings": "node --env-file=.env.local ./scripts/backfill-chunk-embeddings.mjs",
+    "verify:authenticated-rag": "npx tsx ./scripts/verify-authenticated-rag.ts",
     "test:watch": "vitest"
   },
   "dependencies": {

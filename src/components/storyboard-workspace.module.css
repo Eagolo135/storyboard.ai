@@ -59,10 +59,15 @@
 .genreRow,
 .tagRow,
 .promptRow,
-.actions {
+.actions,
+.heroActions {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+}
+
+.heroActions {
+  margin-top: 20px;
 }
 
 .genreRow span,
@@ -186,6 +191,9 @@
 .secondaryButton {
   background: white;
   color: var(--color-ink);
+  display: inline-flex;
+  justify-content: center;
+  text-decoration: none;
 }
 
 .promptChip:hover,

@@ -1,7 +1,6 @@
 import Link from "next/link";
 
 import type { StoryKnowledgeBaseSummary } from "@/lib/data/repository";
-import { DEFAULT_STORY_ID } from "@/lib/data/repository";
 
 import styles from "./dashboard.module.css";
 
@@ -11,7 +10,7 @@ type DemoStoryLibraryProps = {
 };
 
 function getStoryHref(storyId: string) {
-  return storyId === DEFAULT_STORY_ID ? "/" : `/demo/${storyId}`;
+  return `/demo/${storyId}`;
 }
 
 export function DemoStoryLibrary({ stories, activeStoryId }: DemoStoryLibraryProps) {

@@ -4,6 +4,7 @@ import {
   type CreatePastedSourceDocumentInput,
 } from "@/lib/source-documents/schema";
 import { getSourceDocumentRepository } from "@/lib/source-documents/repository";
+import { createChunksForSourceDocument } from "@/lib/source-chunks/service";
 import { getSupabaseAdminConfig, isSupabaseConfigured } from "@/lib/platform/env";
 import { createClient } from "@supabase/supabase-js";
 
@@ -15,6 +16,47 @@ export async function listSourceDocumentsForOwner(ownerId: string) {
 
 export async function listSourceDocumentsForStory(ownerId: string, storyId: string) {
   return getSourceDocumentRepository().listSourceDocumentsForStory(ownerId, storyId);
+}
+
+async function finalizeChunkingForSourceDocument(ownerId: string, sourceDocumentId: string) {
+  const repository = getSourceDocumentRepository();
+  const storyDocuments = await repository.listSourceDocumentsForOwner(ownerId);
+
+  if (!storyDocuments.ok) {
+    return storyDocuments;
+  }
+
+  const document = storyDocuments.data.find((item) => item.id === sourceDocumentId);
+
+  if (!document) {
+    return {
+      ok: false as const,
+      error: "The saved source document could not be loaded for chunking.",
+    };
+  }
+
+  const chunkResult = await createChunksForSourceDocument(ownerId, document);
+
+  if (!chunkResult.ok) {
+    await repository.updateSourceDocumentProcessingStatusForOwner(
+      ownerId,
+      sourceDocumentId,
+      "failed",
+    );
+
+    return {
+      ok: false as const,
+      error: chunkResult.error,
+    };
+  }
+
+  return repository.updateSourceDocumentProcessingStatusForOwner(
+    ownerId,
+    sourceDocumentId,
+    chunkResult.data.every((chunk) => chunk.embedding && chunk.embedding.length > 0)
+      ? "embedded"
+      : "chunked",
+  );
 }
 
 function createSupabaseAdminClient() {
@@ -34,7 +76,7 @@ export async function createPastedSourceDocumentForOwner(
 ) {
   const parsedInput = createPastedSourceDocumentInputSchema.parse(input);
 
-  return getSourceDocumentRepository().createSourceDocumentForOwner(ownerId, {
+  const result = await getSourceDocumentRepository().createSourceDocumentForOwner(ownerId, {
     storyId: parsedInput.storyId,
     sourceType: "pasted-text",
     title: parsedInput.title,
@@ -42,6 +84,18 @@ export async function createPastedSourceDocumentForOwner(
     rawText: parsedInput.rawText,
     processingStatus: "uploaded",
   });
+
+  if (!result.ok) {
+    return result;
+  }
+
+  const chunked = await finalizeChunkingForSourceDocument(ownerId, result.data.id);
+
+  if (!chunked.ok) {
+    return chunked;
+  }
+
+  return chunked;
 }
 
 export async function createUploadedSourceDocumentForOwner(
@@ -99,7 +153,22 @@ export async function createUploadedSourceDocumentForOwner(
       processingStatus: "uploaded",
     });
 
-    return getSourceDocumentRepository().createSourceDocumentForOwner(ownerId, parsedInput);
+    const result = await getSourceDocumentRepository().createSourceDocumentForOwner(
+      ownerId,
+      parsedInput,
+    );
+
+    if (!result.ok) {
+      return result;
+    }
+
+    const chunked = await finalizeChunkingForSourceDocument(ownerId, result.data.id);
+
+    if (!chunked.ok) {
+      return chunked;
+    }
+
+    return chunked;
   } catch (error) {
     const errorMessage =
       error instanceof Error ? error.message : "Unable to upload and extract source.";

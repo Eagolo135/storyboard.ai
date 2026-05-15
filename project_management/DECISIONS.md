@@ -67,3 +67,11 @@ Confidence handling without authentic retrieval would optimize the wrong layer. 
 ## 2026-05-12: Support PDF and DOCX upload during ingestion foundation
 Reason:
 Pasted text alone was enough to prove the story-scoped source-document model, but it was still too narrow for the actual product direction. Adding PDF and DOCX upload with extraction makes the ingestion sprint materially closer to the real workflow without pulling chunking or semantic retrieval forward.
+
+## 2026-05-12: Use an OpenAI-compatible API seam for early live generation
+Reason:
+The product needs real AI-backed generation soon, but locking the repo to one vendor too early would create unnecessary churn. An OpenAI-compatible chat-completions seam covers OpenAI, Together, OpenRouter, and similar providers while preserving a deterministic fallback path.
+
+## 2026-05-12: Keep Clerk as the SSO layer and make Supabase integration explicit rather than implicit
+Reason:
+The repo already chose Clerk for authentication, so the correct next step is not replacing auth but documenting and exposing the activation path clearly. A visible setup guide reduces configuration ambiguity and aligns later Clerk-to-Supabase token work with the actual chosen stack.

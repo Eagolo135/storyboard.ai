@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { PasteSourceForm } from "@/components/paste-source-form";
+import { StorySourceStoryboardPanel } from "@/components/story-source-storyboard-panel";
 import { SourceDocumentList } from "@/components/source-document-list";
 import styles from "@/components/dashboard.module.css";
 import { UploadSourceFileForm } from "@/components/upload-source-file-form";
@@ -36,6 +37,9 @@ export default async function StoryWorkspacePage({
               <li key={item}>{item}</li>
             ))}
           </ul>
+          <Link className={styles.secondaryLink} href="/setup">
+            Open setup guide
+          </Link>
         </section>
       </main>
     );
@@ -53,6 +57,9 @@ export default async function StoryWorkspacePage({
           </p>
           <Link className={styles.secondaryLink} href="/sign-in">
             Sign in
+          </Link>
+          <Link className={styles.secondaryLink} href="/setup">
+            Review setup
           </Link>
         </section>
       </main>
@@ -80,8 +87,8 @@ export default async function StoryWorkspacePage({
           <div className={styles.statusCard}>
             <h3>Ingestion status</h3>
             <p className={styles.mutedText}>
-              Source files can now be uploaded and extracted, but chunking and semantic
-              retrieval are still pending later sprint work.
+              Uploaded and pasted sources are chunked automatically, and storyboard
+              generation now retrieves against those story-owned chunks.
             </p>
           </div>
         </div>
@@ -107,7 +114,7 @@ export default async function StoryWorkspacePage({
         <div className={`${styles.panel} ${styles.fullWidthPanel}`}>
           <div className={styles.sectionHeader}>
             <h2>Story sources</h2>
-            <p>Inspect stored material and its current processing state.</p>
+            <p>Inspect stored material and verify which sources are chunked for retrieval.</p>
           </div>
 
           {sourceDocumentsResult.ok ? (
@@ -119,6 +126,8 @@ export default async function StoryWorkspacePage({
             <p className={styles.errorMessage}>{sourceDocumentsResult.error}</p>
           )}
         </div>
+
+        <StorySourceStoryboardPanel story={story} />
       </section>
     </main>
   );

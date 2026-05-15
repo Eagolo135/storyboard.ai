@@ -1,9 +1,11 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import Link from "next/link";
 
 import type { StoryKnowledgeBase, StoryboardResponse } from "@/lib/schemas/story";
 
+import { SignOutButton } from "./sign-out-button";
 import styles from "./storyboard-workspace.module.css";
 
 const DEFAULT_SAMPLE_REQUESTS = [
@@ -92,6 +94,12 @@ export function StoryboardWorkspace({
             A source-grounded storyboarding workspace for writers managing lore,
             character arcs, world rules, and style constraints across long-form fiction.
           </p>
+          <div className={styles.heroActions}>
+            <Link className={styles.secondaryButton} href="/dashboard">
+              Back to dashboard
+            </Link>
+            <SignOutButton className={styles.secondaryButton} />
+          </div>
         </div>
         <div className={styles.storyMetaCard}>
           <p className={styles.storyTitle}>{knowledgeBase.story.title}</p>
@@ -184,8 +192,13 @@ export function StoryboardWorkspace({
                 <div className={styles.panel}>
                   <div className={styles.panelHeader}>
                     <h2>Retrieved context</h2>
-                    <p>Transparent scoring and selection rationale.</p>
+                    <p>{`${result.retrieval.provider} • ${result.retrieval.model}`}</p>
                   </div>
+                  {result.retrieval.warning ? (
+                    <div className={styles.warningBox}>
+                      <p>{result.retrieval.warning}</p>
+                    </div>
+                  ) : null}
                   <div className={styles.retrievedList}>
                     {result.retrievedNotes.map((note) => (
                       <article className={styles.retrievedCard} key={note.id}>
@@ -217,7 +230,7 @@ export function StoryboardWorkspace({
                 <div className={styles.panel}>
                   <div className={styles.panelHeader}>
                     <h2>Evaluation</h2>
-                    <p>Continuity, style, and source-grounding checks.</p>
+                    <p>{`${result.evaluationMeta.provider} • ${result.evaluationMeta.model}`}</p>
                   </div>
                   <div className={styles.metricGrid}>
                     <div className={styles.metricCard}>
@@ -260,6 +273,7 @@ export function StoryboardWorkspace({
                     {result.evaluation.summary.map((item) => (
                       <p key={item}>{item}</p>
                     ))}
+                    {result.evaluationMeta.warning ? <p>{result.evaluationMeta.warning}</p> : null}
                     {result.evaluation.hallucinationRisk.unsupportedEntities.map((item) => (
                       <p key={item}>Unsupported entity: {item}</p>
                     ))}
@@ -273,8 +287,16 @@ export function StoryboardWorkspace({
               <div className={styles.panel}>
                 <div className={styles.panelHeader}>
                   <h2>Structured storyboard</h2>
-                  <p>Built from retrieved notes and shaped for long-form planning.</p>
+                  <p>
+                    Built from retrieved notes and shaped for long-form planning.
+                    {` ${result.generation.provider} • ${result.generation.model}`}
+                  </p>
                 </div>
+                {result.generation.warning ? (
+                  <div className={styles.warningBox}>
+                    <p>{result.generation.warning}</p>
+                  </div>
+                ) : null}
                 <div className={styles.storyboardSections}>
                   <section>
                     <h3>Scene goal</h3>

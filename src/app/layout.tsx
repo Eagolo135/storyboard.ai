@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Fraunces, Manrope } from "next/font/google";
 
 import { AppAuthProvider } from "@/components/app-auth-provider";
+import { AppNavigation } from "@/components/app-navigation";
+import { getViewer } from "@/lib/auth/viewer";
 
 import "./globals.css";
 
@@ -21,15 +23,20 @@ export const metadata: Metadata = {
     "A source-grounded storyboarding platform for long-form fiction planning.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const viewer = await getViewer();
+
   return (
     <html lang="en">
       <body className={`${headingFont.variable} ${bodyFont.variable}`}>
-        <AppAuthProvider>{children}</AppAuthProvider>
+        <AppAuthProvider>
+          <AppNavigation viewerStatus={viewer.status} />
+          {children}
+        </AppAuthProvider>
       </body>
     </html>
   );

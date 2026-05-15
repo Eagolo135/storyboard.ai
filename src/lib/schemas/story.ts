@@ -54,6 +54,7 @@ export const retrievalScoreBreakdownSchema = z.object({
   categoryAlignment: z.number().nonnegative(),
   chapterRelevance: z.number().nonnegative(),
   priorityBoost: z.number().nonnegative(),
+  semanticSimilarity: z.number().nonnegative(),
   total: z.number().nonnegative(),
 });
 
@@ -65,6 +66,21 @@ export type StoryboardRequest = z.infer<typeof storyboardRequestSchema>;
 export type RetrievalScoreBreakdown = z.infer<
   typeof retrievalScoreBreakdownSchema
 >;
+
+export type RetrievalMetadata = {
+  mode: "lexical-fallback" | "semantic-hybrid";
+  provider: string;
+  model: string;
+  candidateCount: number;
+  warning?: string;
+};
+
+export type EvaluationMetadata = {
+  mode: "heuristic-fallback" | "ai-provider";
+  provider: string;
+  model: string;
+  warning?: string;
+};
 
 export type RetrievedStoryNote = StoryNote & {
   score: number;
@@ -88,6 +104,13 @@ export type StoryboardOutput = {
   request: string;
   sections: StoryboardSections;
   citations: Record<keyof StoryboardSections, string[]>;
+};
+
+export type StoryboardGenerationMetadata = {
+  mode: "deterministic-fallback" | "ai-provider";
+  provider: string;
+  model: string;
+  warning?: string;
 };
 
 export type HallucinationAssessment = {
@@ -114,7 +137,10 @@ export type StoryboardResponse = {
   story: StoryMetadata;
   request: string;
   retrievedNotes: RetrievedStoryNote[];
+  retrieval: RetrievalMetadata;
   storyboard: StoryboardOutput;
+  generation: StoryboardGenerationMetadata;
   evaluation: StoryEvaluation;
+  evaluationMeta: EvaluationMetadata;
   markdown: string;
 };
