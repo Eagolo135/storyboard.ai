@@ -3,7 +3,6 @@ import {
   createPastedSourceDocumentInputSchema,
   type CreatePastedSourceDocumentInput,
 } from "@/lib/source-documents/schema";
-import { getUploadSourceTypeFromFileName } from "@/lib/source-documents/extract";
 import { getSourceDocumentRepository } from "@/lib/source-documents/repository";
 import { createChunksForSourceDocument } from "@/lib/source-chunks/service";
 import { getSupabaseAdminConfig, isSupabaseConfigured } from "@/lib/platform/env";
@@ -11,6 +10,20 @@ import { createClient } from "@supabase/supabase-js";
 
 const SOURCE_DOCUMENTS_BUCKET = "source-documents";
 const MAX_SOURCE_UPLOAD_BYTES = 10 * 1024 * 1024;
+
+function getUploadSourceTypeFromFileName(fileName: string) {
+  const normalizedFileName = fileName.trim().toLowerCase();
+
+  if (normalizedFileName.endsWith(".pdf")) {
+    return "pdf" as const;
+  }
+
+  if (normalizedFileName.endsWith(".docx")) {
+    return "docx" as const;
+  }
+
+  return null;
+}
 
 export async function listSourceDocumentsForOwner(ownerId: string) {
   return getSourceDocumentRepository().listSourceDocumentsForOwner(ownerId);
