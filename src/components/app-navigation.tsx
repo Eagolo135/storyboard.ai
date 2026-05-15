@@ -72,14 +72,9 @@ export function AppNavigation({ viewerStatus }: AppNavigationProps) {
               <SignOutButton className={styles.secondaryAction} />
             </>
           ) : viewerStatus === "signed-out" ? (
-            <>
-              <Link className={styles.secondaryAction} href="/sign-up">
-                Sign up
-              </Link>
-              <Link className={styles.primaryAction} href="/sign-in">
-                Sign in
-              </Link>
-            </>
+            <Link className={styles.primaryAction} href="/sign-in">
+              Sign in
+            </Link>
           ) : (
             <Link className={styles.secondaryAction} href="/setup">
               Configure app

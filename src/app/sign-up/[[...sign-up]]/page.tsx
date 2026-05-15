@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 import styles from "@/components/dashboard.module.css";
 import { isClerkConfigured } from "@/lib/platform/env";
@@ -22,11 +23,5 @@ export default async function SignUpPage() {
     );
   }
 
-  const { SignUp } = await import("@clerk/nextjs");
-
-  return (
-    <main className={styles.pageShell}>
-      <SignUp />
-    </main>
-  );
+  redirect("/sign-in");
 }

@@ -23,11 +23,24 @@ export interface SourceDocumentRepository {
     ownerId: string,
     input: CreateSourceDocumentRecordInput,
   ): Promise<SourceDocumentRepositoryResult<SourceDocumentRecord>>;
+  updateSourceDocumentForOwner(
+    ownerId: string,
+    sourceDocumentId: string,
+    input: CreateSourceDocumentRecordInput,
+  ): Promise<SourceDocumentRepositoryResult<SourceDocumentRecord>>;
   updateSourceDocumentProcessingStatusForOwner(
     ownerId: string,
     sourceDocumentId: string,
     processingStatus: SourceDocumentRecord["processingStatus"],
   ): Promise<SourceDocumentRepositoryResult<SourceDocumentRecord>>;
+  deleteSourceDocumentForOwner(
+    ownerId: string,
+    sourceDocumentId: string,
+  ): Promise<SourceDocumentRepositoryResult<null>>;
+  deleteSourceDocumentsForOwner(
+    ownerId: string,
+    sourceDocumentIds: string[],
+  ): Promise<SourceDocumentRepositoryResult<null>>;
 }
 
 function createSupabaseAdminClient() {
@@ -158,6 +171,48 @@ class SupabaseSourceDocumentRepository implements SourceDocumentRepository {
     }
   }
 
+  async updateSourceDocumentForOwner(
+    ownerId: string,
+    sourceDocumentId: string,
+    input: CreateSourceDocumentRecordInput,
+  ): Promise<SourceDocumentRepositoryResult<SourceDocumentRecord>> {
+    try {
+      const client = createSupabaseAdminClient();
+      const { data, error } = await client
+        .from("source_documents")
+        .update({
+          story_id: input.storyId,
+          source_type: input.sourceType,
+          file_name: input.title,
+          storage_path: input.storagePath,
+          raw_text: input.rawText,
+          processing_status: input.processingStatus,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("owner_clerk_id", ownerId)
+        .eq("id", sourceDocumentId)
+        .select(
+          "id, story_id, owner_clerk_id, source_type, file_name, storage_path, raw_text, processing_status, created_at, updated_at",
+        )
+        .single();
+
+      if (error) {
+        return { ok: false, error: error.message };
+      }
+
+      return {
+        ok: true,
+        data: mapSourceDocumentRow(data),
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        error:
+          error instanceof Error ? error.message : "Unable to update source document.",
+      };
+    }
+  }
+
   async updateSourceDocumentProcessingStatusForOwner(
     ownerId: string,
     sourceDocumentId: string,
@@ -194,6 +249,53 @@ class SupabaseSourceDocumentRepository implements SourceDocumentRepository {
       };
     }
   }
+
+  async deleteSourceDocumentForOwner(
+    ownerId: string,
+    sourceDocumentId: string,
+  ): Promise<SourceDocumentRepositoryResult<null>> {
+    return this.deleteSourceDocumentsForOwner(ownerId, [sourceDocumentId]);
+  }
+
+  async deleteSourceDocumentsForOwner(
+    ownerId: string,
+    sourceDocumentIds: string[],
+  ): Promise<SourceDocumentRepositoryResult<null>> {
+    try {
+      if (sourceDocumentIds.length === 0) {
+        return { ok: true, data: null };
+      }
+
+      const client = createSupabaseAdminClient();
+      const { error: chunkError } = await client
+        .from("source_document_chunks")
+        .delete()
+        .eq("owner_clerk_id", ownerId)
+        .in("source_document_id", sourceDocumentIds);
+
+      if (chunkError) {
+        return { ok: false, error: chunkError.message };
+      }
+
+      const { error } = await client
+        .from("source_documents")
+        .delete()
+        .eq("owner_clerk_id", ownerId)
+        .in("id", sourceDocumentIds);
+
+      if (error) {
+        return { ok: false, error: error.message };
+      }
+
+      return { ok: true, data: null };
+    } catch (error) {
+      return {
+        ok: false,
+        error:
+          error instanceof Error ? error.message : "Unable to delete source document.",
+      };
+    }
+  }
 }
 
 class UnconfiguredSourceDocumentRepository implements SourceDocumentRepository {
@@ -227,6 +329,16 @@ class UnconfiguredSourceDocumentRepository implements SourceDocumentRepository {
     };
   }
 
+  async updateSourceDocumentForOwner(): Promise<
+    SourceDocumentRepositoryResult<SourceDocumentRecord>
+  > {
+    return {
+      ok: false,
+      error:
+        "Supabase is not configured yet. Add the required environment variables before updating source documents.",
+    };
+  }
+
   async updateSourceDocumentProcessingStatusForOwner(): Promise<
     SourceDocumentRepositoryResult<SourceDocumentRecord>
   > {
@@ -234,6 +346,26 @@ class UnconfiguredSourceDocumentRepository implements SourceDocumentRepository {
       ok: false,
       error:
         "Supabase is not configured yet. Add the required environment variables before updating source documents.",
+    };
+  }
+
+  async deleteSourceDocumentForOwner(): Promise<
+    SourceDocumentRepositoryResult<null>
+  > {
+    return {
+      ok: false,
+      error:
+        "Supabase is not configured yet. Add the required environment variables before deleting source documents.",
+    };
+  }
+
+  async deleteSourceDocumentsForOwner(): Promise<
+    SourceDocumentRepositoryResult<null>
+  > {
+    return {
+      ok: false,
+      error:
+        "Supabase is not configured yet. Add the required environment variables before deleting source documents.",
     };
   }
 }

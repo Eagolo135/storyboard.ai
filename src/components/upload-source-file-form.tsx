@@ -39,8 +39,8 @@ export function UploadSourceFileForm({ storyId }: UploadSourceFileFormProps) {
       </div>
 
       <p className={styles.formNote}>
-        Uploaded files are stored and text is extracted server-side. Chunking and
-        embeddings still come later.
+        Uploaded files are stored and text is extracted server-side. Files larger than
+        3000 KB are supported, up to a 10 MB request size.
       </p>
 
       <button className={styles.primaryAction} disabled={isPending} type="submit">

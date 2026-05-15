@@ -1,5 +1,8 @@
 .shell {
+  position: sticky;
   padding: 18px 24px 0;
+  top: 0;
+  z-index: 30;
 }
 
 .bar {
@@ -49,10 +52,22 @@
   justify-content: center;
   padding: 10px 16px;
   text-decoration: none;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    transform 160ms ease,
+    box-shadow 160ms ease;
 }
 
 .navLink {
   color: var(--color-muted);
+}
+
+.navLink:hover,
+.navLink:focus-visible {
+  background: rgba(187, 90, 60, 0.08);
+  color: var(--color-ink);
 }
 
 .navLinkActive {
@@ -69,7 +84,15 @@
 .primaryAction {
   background: linear-gradient(135deg, #bb5a3c, #d98d4e);
   border: 0;
+  box-shadow: 0 14px 28px rgba(187, 90, 60, 0.18);
   color: white;
+}
+
+.primaryAction:hover,
+.primaryAction:focus-visible,
+.secondaryAction:hover,
+.secondaryAction:focus-visible {
+  transform: translateY(-1px);
 }
 
 .secondaryAction {

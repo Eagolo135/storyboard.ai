@@ -8,6 +8,8 @@ import {
   sourceDocumentChunkSchema,
 } from "@/lib/source-chunks/schema";
 
+const SOURCE_DOCUMENT_CHUNK_INSERT_BATCH_SIZE = 50;
+
 export type SourceDocumentChunkRepositoryResult<T> =
   | { ok: true; data: T }
   | { ok: false; error: string };
@@ -121,34 +123,48 @@ class SupabaseSourceDocumentChunkRepository implements SourceDocumentChunkReposi
         return { ok: true, data: [] };
       }
 
-      const { data, error } = await client
-        .from("source_document_chunks")
-        .insert(
-          chunks.map((chunk) => ({
-            owner_clerk_id: ownerId,
-            source_document_id: sourceDocumentId,
-            story_id: storyId,
-            chunk_index: chunk.chunkIndex,
-            heading: chunk.heading,
-            content: chunk.content,
-            token_count: chunk.tokenCount,
-            character_count: chunk.characterCount,
-            embedding: chunk.embedding,
-            embedding_model: chunk.embeddingModel,
-            embedded_at: chunk.embeddedAt,
-          })),
-        )
-        .select(
-          "id, source_document_id, story_id, owner_clerk_id, chunk_index, heading, content, token_count, character_count, embedding, embedding_model, embedded_at, created_at, updated_at, source_documents(file_name)",
-        );
+      const inserted: SourceDocumentChunk[] = [];
 
-      if (error) {
-        return { ok: false, error: error.message };
+      for (
+        let startIndex = 0;
+        startIndex < chunks.length;
+        startIndex += SOURCE_DOCUMENT_CHUNK_INSERT_BATCH_SIZE
+      ) {
+        const batch = chunks.slice(
+          startIndex,
+          startIndex + SOURCE_DOCUMENT_CHUNK_INSERT_BATCH_SIZE,
+        );
+        const { data, error } = await client
+          .from("source_document_chunks")
+          .insert(
+            batch.map((chunk) => ({
+              owner_clerk_id: ownerId,
+              source_document_id: sourceDocumentId,
+              story_id: storyId,
+              chunk_index: chunk.chunkIndex,
+              heading: chunk.heading,
+              content: chunk.content,
+              token_count: chunk.tokenCount,
+              character_count: chunk.characterCount,
+              embedding: chunk.embedding,
+              embedding_model: chunk.embeddingModel,
+              embedded_at: chunk.embeddedAt,
+            })),
+          )
+          .select(
+            "id, source_document_id, story_id, owner_clerk_id, chunk_index, heading, content, token_count, character_count, embedding, embedding_model, embedded_at, created_at, updated_at, source_documents(file_name)",
+          );
+
+        if (error) {
+          return { ok: false, error: error.message };
+        }
+
+        inserted.push(...(data ?? []).map((row) => mapSourceDocumentChunkRow(row)));
       }
 
       return {
         ok: true,
-        data: (data ?? []).map((row) => mapSourceDocumentChunkRow(row)),
+        data: inserted,
       };
     } catch (error) {
       return {

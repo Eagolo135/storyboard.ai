@@ -3,12 +3,14 @@ import {
   createPastedSourceDocumentInputSchema,
   type CreatePastedSourceDocumentInput,
 } from "@/lib/source-documents/schema";
+import { getUploadSourceTypeFromFileName } from "@/lib/source-documents/extract";
 import { getSourceDocumentRepository } from "@/lib/source-documents/repository";
 import { createChunksForSourceDocument } from "@/lib/source-chunks/service";
 import { getSupabaseAdminConfig, isSupabaseConfigured } from "@/lib/platform/env";
 import { createClient } from "@supabase/supabase-js";
 
 const SOURCE_DOCUMENTS_BUCKET = "source-documents";
+const MAX_SOURCE_UPLOAD_BYTES = 10 * 1024 * 1024;
 
 export async function listSourceDocumentsForOwner(ownerId: string) {
   return getSourceDocumentRepository().listSourceDocumentsForOwner(ownerId);
@@ -70,6 +72,15 @@ function createSupabaseAdminClient() {
   });
 }
 
+async function removeSourceDocumentStorageObjects(storagePaths: string[]) {
+  if (storagePaths.length === 0) {
+    return;
+  }
+
+  const storageClient = createSupabaseAdminClient();
+  await storageClient.storage.from(SOURCE_DOCUMENTS_BUCKET).remove(storagePaths);
+}
+
 export async function createPastedSourceDocumentForOwner(
   ownerId: string,
   input: CreatePastedSourceDocumentInput,
@@ -118,10 +129,57 @@ export async function createUploadedSourceDocumentForOwner(
     };
   }
 
+  if (file.size > MAX_SOURCE_UPLOAD_BYTES) {
+    return {
+      ok: false as const,
+      error: "Source uploads must be 10 MB or smaller.",
+    };
+  }
+
   const storageClient = createSupabaseAdminClient();
+  const repository = getSourceDocumentRepository();
   const normalizedStoryId = storyId.trim();
   const fileName = file.name.trim();
+  const sourceType = getUploadSourceTypeFromFileName(fileName);
+
+  if (!sourceType) {
+    return {
+      ok: false as const,
+      error: "Only PDF and DOCX uploads are supported in this sprint.",
+    };
+  }
+
+  const storyDocuments = await repository.listSourceDocumentsForStory(
+    ownerId,
+    normalizedStoryId,
+  );
+
+  if (!storyDocuments.ok) {
+    return storyDocuments;
+  }
+
+  const matchingDocuments = storyDocuments.data.filter(
+    (document) => document.fileName === fileName && document.sourceType === sourceType,
+  );
+  const [existingDocument, ...staleDocuments] = matchingDocuments;
+
+  const deleteResult = await repository.deleteSourceDocumentsForOwner(
+    ownerId,
+    staleDocuments.map((document) => document.id),
+  );
+
+  if (!deleteResult.ok) {
+    return deleteResult;
+  }
+
+  await removeSourceDocumentStorageObjects(
+    staleDocuments
+      .map((document) => document.storagePath)
+      .filter((storagePath): storagePath is string => Boolean(storagePath)),
+  );
+
   const storagePath = `${ownerId}/${normalizedStoryId}/${crypto.randomUUID()}-${fileName.replace(/\s+/g, "-")}`;
+  let uploadedStoragePath: string | null = null;
 
   try {
     const buffer = Buffer.from(await file.arrayBuffer());
@@ -144,6 +202,8 @@ export async function createUploadedSourceDocumentForOwner(
       };
     }
 
+    uploadedStoragePath = storagePath;
+
     const parsedInput = createSourceDocumentRecordInputSchema.parse({
       storyId: normalizedStoryId,
       sourceType: extracted.sourceType,
@@ -153,13 +213,19 @@ export async function createUploadedSourceDocumentForOwner(
       processingStatus: "uploaded",
     });
 
-    const result = await getSourceDocumentRepository().createSourceDocumentForOwner(
-      ownerId,
-      parsedInput,
-    );
+    const result = existingDocument
+      ? await repository.updateSourceDocumentForOwner(ownerId, existingDocument.id, parsedInput)
+      : await repository.createSourceDocumentForOwner(ownerId, parsedInput);
 
     if (!result.ok) {
+      await removeSourceDocumentStorageObjects([storagePath]);
       return result;
+    }
+
+    uploadedStoragePath = null;
+
+    if (existingDocument?.storagePath && existingDocument.storagePath !== storagePath) {
+      await removeSourceDocumentStorageObjects([existingDocument.storagePath]);
     }
 
     const chunked = await finalizeChunkingForSourceDocument(ownerId, result.data.id);
@@ -173,19 +239,27 @@ export async function createUploadedSourceDocumentForOwner(
     const errorMessage =
       error instanceof Error ? error.message : "Unable to upload and extract source.";
 
+    if (uploadedStoragePath) {
+      await removeSourceDocumentStorageObjects([uploadedStoragePath]);
+    }
+
+    if (existingDocument) {
+      return {
+        ok: false as const,
+        error: errorMessage,
+      };
+    }
+
     const parsedInput = createSourceDocumentRecordInputSchema.parse({
       storyId: normalizedStoryId,
-      sourceType: fileName.toLowerCase().endsWith(".pdf") ? "pdf" : "docx",
+      sourceType,
       title: fileName || "Uploaded source",
       storagePath: null,
       rawText: null,
       processingStatus: "failed",
     });
 
-    const result = await getSourceDocumentRepository().createSourceDocumentForOwner(
-      ownerId,
-      parsedInput,
-    );
+    const result = await repository.createSourceDocumentForOwner(ownerId, parsedInput);
 
     if (!result.ok) {
       return {
