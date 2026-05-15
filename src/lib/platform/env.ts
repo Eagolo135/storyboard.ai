@@ -41,8 +41,28 @@ export type AiProviderConfig = {
   model: string;
 };
 
+function stripMatchingQuotes(value: string) {
+  if (
+    (value.startsWith('"') && value.endsWith('"')) ||
+    (value.startsWith("'") && value.endsWith("'"))
+  ) {
+    return value.slice(1, -1);
+  }
+
+  return value;
+}
+
+function normalizeEnvInput(input: NodeJS.ProcessEnv) {
+  return Object.fromEntries(
+    Object.entries(input).map(([key, value]) => [
+      key,
+      typeof value === "string" ? stripMatchingQuotes(value) : value,
+    ]),
+  );
+}
+
 export function getPlatformEnv(input: NodeJS.ProcessEnv = process.env): PlatformEnv {
-  return platformEnvSchema.parse(input);
+  return platformEnvSchema.parse(normalizeEnvInput(input));
 }
 
 export function isClerkConfigured(input: NodeJS.ProcessEnv = process.env) {
